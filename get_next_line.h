@@ -6,7 +6,7 @@
 /*   By: hel-achh <hel-achh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 21:52:08 by hel-achh          #+#    #+#             */
-/*   Updated: 2025/11/10 20:48:57 by hel-achh         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:17:39 by hel-achh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_list
 }				t_list;
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 5
 # endif
 
 int		is_there_line(t_list *head);

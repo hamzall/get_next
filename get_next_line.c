@@ -6,7 +6,7 @@
 /*   By: hel-achh <hel-achh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 10:11:49 by hel-achh          #+#    #+#             */
-/*   Updated: 2025/11/10 20:49:25 by hel-achh         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:16:36 by hel-achh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	free_linked_list(t_list **head, char *str, t_list **node)
 	}
 }
 
-static void	create_linked_list(t_list **head, int fd)
+static int	create_linked_list(t_list **head, int fd)
 {
 	char	*value;
 	int		chars_readed;
@@ -46,19 +46,21 @@ static void	create_linked_list(t_list **head, int fd)
 	{
 		value = (char *)malloc(BUFFER_SIZE + 1);
 		if (!value)
-		{
-			free_linked_list(head, NULL, NULL);
-			return ;
-		}
+			return (free_linked_list(head, NULL, NULL), -1);
 		chars_readed = read(fd, value, BUFFER_SIZE);
 		if (chars_readed <= 0)
 		{
-			free(value);
-			return ;
+			if(chars_readed == -1)
+			{
+				free_linked_list(head, NULL, NULL);
+				return (free(value), -1);
+			}
+			return (free(value), 1);
 		}
 		value[chars_readed] = '\0';
 		push_at_back(head, value);
 	}
+	return 1;
 }
 
 static char	*get_characters_to_line(t_list *head)
@@ -125,12 +127,8 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX)
 		return (NULL);
-	if (read(fd, 0, 0) < 0)
-	{
-		free_linked_list(&head, NULL, NULL);
-		return (NULL);
-	}
-	create_linked_list(&head, fd);
+	if (create_linked_list(&head, fd) == -1)
+		return NULL;
 	if (!head)
 		return (NULL);
 	line = get_characters_to_line(head);
